@@ -1,0 +1,13 @@
+/* Future-proofing for on-page overlays */
+.ic-overlay-injected {
+  all: initial;
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 400px;
+  height: 100vh;
+  z-index: 2147483647;
+  background: #121212;
+  border-left: 1px solid #333;
+  box-shadow: -4px 0 12px rgba(0,0,0,0.5);
+}

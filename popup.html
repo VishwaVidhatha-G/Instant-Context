@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Instant Context</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <div class="app-container">
+    <!-- Header -->
+    <header>
+      <div class="brand">
+        <div class="logo">IC</div>
+        <h1>Instant Context</h1>
+      </div>
+      <div class="header-actions">
+        <!-- New Reset Button -->
+        <button id="resetSessionBtn" title="Reset Session" class="action-icon">↺</button>
+        <button id="expandBtn" title="Expand View" class="action-icon">⤢</button>
+        <button id="settingsBtn" title="Settings" class="action-icon">⚙</button>
+      </div>
+    </header>
+
+    <!-- Main View Section -->
+    <div class="tabs">
+      <button id="tabChat" class="tab-btn active">Live Chat</button>
+      <button id="tabSum" class="tab-btn">Summarize</button>
+    </div>
+
+    <!-- Chat View -->
+    <div id="chatView" class="view">
+      <div id="chatContainer" class="chat-flow">
+        <div class="system-msg">Session ready. Ask about the page.</div>
+      </div>
+      <div class="input-box">
+        <textarea id="userInput" placeholder="Ask a targeted question..." rows="1"></textarea>
+        <div class="input-footer">
+          <span class="label">Context Active</span>
+          <button id="askBtn" class="primary-btn">Ask Context</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Summarize View -->
+    <div id="summaryView" class="view hidden">
+      <div class="view-header">
+        <h2>Smart Summary</h2>
+        <button id="refreshSum" class="refresh-btn">Regenerate</button>
+      </div>
+      <div id="summaryOutput" class="summary-content">
+        Loading webpage summary...
+      </div>
+    </div>
+
+    <!-- Settings Overlay -->
+    <div id="settingsPanel" class="settings-panel hidden">
+      <div class="view-header">
+        <h2>API Configuration</h2>
+        <button id="closeSettings" class="action-icon">✕</button>
+      </div>
+      <div class="input-group">
+        <label>Gemini API Key</label>
+        <input type="password" id="geminiKey" placeholder="Enter key...">
+      </div>
+      <div class="input-group">
+        <label>Serper Search API Key</label>
+        <input type="password" id="serperKey" placeholder="Enter key...">
+      </div>
+      <button id="saveKeysBtn" class="save-btn">Save Preferences</button>
+    </div>
+  </div>
+  <script src="popup.js"></script>
+</body>
+</html>

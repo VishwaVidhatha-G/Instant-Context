@@ -1,0 +1,82 @@
+:root {
+  --bg-app: #121212;
+  --bg-card: #1e1e1e;
+  --bg-input: #2a2a2a;
+  --border: #333333;
+  --text-primary: #ffffff;
+  --text-secondary: #aaaaaa;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, sans-serif; }
+
+html, body {
+  width: 420px;
+  height: 100vh;
+  min-height: 600px;
+  background-color: var(--bg-app);
+  color: var(--text-primary);
+  font-size: 15px;
+  overflow: hidden;
+}
+
+@media (min-width: 500px) {
+  html, body { width: 100vw !important; height: 100vh !important; }
+}
+
+.app-container { display: flex; flex-direction: column; width: 100%; height: 100%; position: relative; }
+
+header {
+  padding: 16px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 2px solid var(--border);
+  flex-shrink: 0;
+}
+
+.brand { display: flex; align-items: center; gap: 12px; }
+.logo { background: white; color: black; font-weight: 800; padding: 4px 8px; border-radius: 6px; font-size: 12px; }
+h1 { font-size: 17px; font-weight: 600; letter-spacing: -0.5px; }
+
+.header-actions { display: flex; gap: 10px; }
+.action-icon {
+  background: none; border: none; font-size: 20px; color: var(--text-secondary); cursor: pointer; padding: 5px;
+}
+.action-icon:hover { color: white; }
+
+/* Tabs */
+.tabs { display: flex; background: var(--bg-card); padding: 5px; margin: 15px 20px; border-radius: 10px; border: 1px solid var(--border); flex-shrink: 0; }
+.tab-btn { flex: 1; padding: 10px; border: none; background: none; color: var(--text-secondary); font-weight: 600; cursor: pointer; border-radius: 7px; font-size: 13px; }
+.tab-btn.active { background: var(--bg-input); color: white; box-shadow: 0 4px 15px rgba(0,0,0,0.5); }
+
+.view { flex: 1; display: flex; flex-direction: column; overflow: hidden; padding: 0 20px 0 20px; }
+.hidden { display: none !important; }
+
+.chat-flow { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 20px; padding-bottom: 20px; }
+.chat-flow::-webkit-scrollbar { width: 4px; }
+.chat-flow::-webkit-scrollbar-thumb { background: var(--border); border-radius: 10px; }
+
+.msg-group { display: flex; flex-direction: column; gap: 10px; border-bottom: 1px solid var(--border); padding-bottom: 25px; margin-bottom: 10px; }
+.label { font-size: 11px; font-weight: 800; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 1.5px; opacity: 0.8; }
+.text { font-size: 15px; line-height: 1.7; }
+.section-header { font-size: 12px; font-weight: 900; color: #000; background: #fff; padding: 4px 12px; border-radius: 4px; display: inline-block; margin: 25px 0 12px 0; letter-spacing: 1px; text-transform: uppercase; }
+
+/* ENHANCED BULLET SPACING FIX */
+li { margin-left: 20px; margin-top: 10px; margin-bottom: 24px; list-style: disc; line-height: 1.8; }
+
+.input-box { background: var(--bg-card); padding: 15px; border-radius: 14px 14px 0 0; border: 1px solid var(--border); border-bottom: none; box-shadow: 0 -10px 30px rgba(0,0,0,0.5); flex-shrink: 0; }
+textarea { width: 100%; border: none; background: none; color: white; font-size: 15px; resize: none; min-height: 50px; line-height: 1.5; outline: none; }
+.input-footer { display: flex; justify-content: space-between; align-items: center; margin-top: 10px; }
+.primary-btn { background: white; color: black; border: none; padding: 10px 20px; border-radius: 8px; font-weight: 800; cursor: pointer; }
+
+.view-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; padding-top: 10px; flex-shrink: 0; }
+.refresh-btn { background: var(--bg-input); color: white; border: 1px solid var(--border); padding: 8px 16px; border-radius: 8px; font-size: 12px; font-weight: 700; cursor: pointer; }
+
+.summary-content { flex: 1; overflow-y: auto; background: var(--bg-card); padding: 30px; border-radius: 16px 16px 0 0; border: 1px solid var(--border); border-bottom: none; font-size: 16px; }
+
+.settings-panel { position: absolute; inset: 0; background: var(--bg-app); z-index: 100; padding: 30px; display: flex; flex-direction: column; gap: 20px; }
+.input-group label { display: block; font-size: 13px; color: var(--text-secondary); margin-bottom: 8px; }
+.input-group input { width: 100%; background: var(--bg-card); border: 1px solid var(--border); padding: 12px; color: white; border-radius: 6px; }
+.save-btn { background: white; color: black; border: none; padding: 15px; border-radius: 8px; font-weight: 800; cursor: pointer; }
+
+.system-msg { padding: 20px; text-align: center; color: var(--text-secondary); font-style: italic; font-size: 13px; }

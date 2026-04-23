@@ -1,0 +1,18 @@
+{
+  "manifest_version": 3,
+  "name": "Instant Context",
+  "version": "2.0",
+  "description": "Premium AI assistant for webpage analysis and search verification.",
+  "permissions": ["activeTab", "scripting", "storage", "sidePanel"],
+  "action": {
+    "default_popup": "popup.html"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"],
+      "css": ["overlay.css"]
+    }
+  ],
+  "host_permissions": ["<all_urls>"]
+}
