@@ -7,66 +7,79 @@
 </head>
 <body>
   <div class="app-container">
-    <!-- Header -->
+    <!-- Formal Header -->
     <header>
       <div class="brand">
-        <div class="logo">IC</div>
+        <div class="logo-sq">IC</div>
         <h1>Instant Context</h1>
       </div>
       <div class="header-actions">
-        <!-- New Reset Button -->
-        <button id="resetSessionBtn" title="Reset Session" class="action-icon">↺</button>
-        <button id="expandBtn" title="Expand View" class="action-icon">⤢</button>
-        <button id="settingsBtn" title="Settings" class="action-icon">⚙</button>
+        <button id="resetSessionBtn" title="Reset Session" class="nav-action">
+          <svg viewBox="0 0 24 24"><path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>
+        </button>
+        <button id="detachBtn" title="Open in Window" class="nav-action">
+          <svg viewBox="0 0 24 24"><path d="M19 19H5V5h7V3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z"/></svg>
+        </button>
+        <button id="expandBtn" title="Open Sidepanel" class="nav-action">
+          <svg viewBox="0 0 24 24"><path d="M3 3h18v18H3V3zm16 16V5H5v14h14zm-4-2H7V7h8v10z"/></svg>
+        </button>
+        <button id="settingsBtn" title="Settings" class="nav-action">
+          <svg viewBox="0 0 24 24"><path d="M19.14,12.94c0.04-0.3,0.06-0.61,0.06-0.94c0-0.32-0.02-0.64-0.06-0.94l2.03-1.58c0.18-0.14,0.23-0.41,0.12-0.61 l-1.92-3.32c-0.12-0.22-0.37-0.29-0.59-0.22l-2.39,0.96c-0.5-0.38-1.03-0.7-1.62-0.94L14.4,2.81c-0.04-0.24-0.24-0.41-0.48-0.41 h-3.84c-0.24,0-0.43,0.17-0.47,0.41L9.25,5.35C8.66,5.59,8.12,5.92,7.63,6.29L5.24,5.33c-0.22-0.08-0.47,0-0.59,0.22L2.73,8.87 C2.62,9.08,2.66,9.34,2.86,9.48l2.03,1.58C4.84,11.36,4.8,11.69,4.8,12s0.02,0.64,0.06,0.94l-2.03,1.58 c-0.18,0.14-0.23,0.41-0.12,0.61l1.92,3.32c0.12,0.22,0.37,0.29,0.59,0.22l2.39-0.96c0.5,0.38,1.03,0.7,1.62,0.94l0.36,2.54 c0.05,0.24,0.24,0.41,0.48,0.41h3.84c0.24,0,0.43-0.17,0.47-0.41l0.36-2.54c0.59-0.24,1.13-0.56,1.62-0.94l2.39,0.96 c0.22,0.08,0.47,0,0.59-0.22l1.92-3.32c0.12-0.22,0.07-0.49-0.12-0.61L19.14,12.94z M12,15.6c-1.98,0-3.6-1.62-3.6-3.6 s1.62-3.6,3.6-3.6s3.6,1.62,3.6,3.6S13.98,15.6,12,15.6z"/></svg>
+        </button>
       </div>
     </header>
 
-    <!-- Main View Section -->
-    <div class="tabs">
+    <!-- Formal Navigation -->
+    <nav class="tabs">
       <button id="tabChat" class="tab-btn active">Live Chat</button>
-      <button id="tabSum" class="tab-btn">Summarize</button>
-    </div>
+      <button id="tabSum" class="tab-btn">Summary</button>
+    </nav>
 
     <!-- Chat View -->
     <div id="chatView" class="view">
-      <div id="chatContainer" class="chat-flow">
-        <div class="system-msg">Session ready. Ask about the page.</div>
+      <div id="chatContainer" class="scroll-area">
+        <div class="system-msg">System Ready. Awaiting Input.</div>
       </div>
-      <div class="input-box">
-        <textarea id="userInput" placeholder="Ask a targeted question..." rows="1"></textarea>
-        <div class="input-footer">
-          <span class="label">Context Active</span>
-          <button id="askBtn" class="primary-btn">Ask Context</button>
+      <div class="input-area">
+        <div class="input-container">
+          <textarea id="userInput" placeholder="Ask anything..." rows="1"></textarea>
+          <button id="askBtn" class="send-btn">
+            <svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+          </button>
         </div>
       </div>
     </div>
 
-    <!-- Summarize View -->
+    <!-- Summary View -->
     <div id="summaryView" class="view hidden">
-      <div class="view-header">
-        <h2>Smart Summary</h2>
-        <button id="refreshSum" class="refresh-btn">Regenerate</button>
-      </div>
-      <div id="summaryOutput" class="summary-content">
-        Loading webpage summary...
+      <div class="scroll-area">
+        <div class="summary-top">
+          <h2>Summary</h2>
+          <button id="refreshSum" class="context-btn">Context</button>
+        </div>
+        <div id="summaryOutput" class="summary-content">
+          <div class="system-msg">Click 'Context' to analyze the current webpage.</div>
+        </div>
       </div>
     </div>
 
     <!-- Settings Overlay -->
-    <div id="settingsPanel" class="settings-panel hidden">
-      <div class="view-header">
-        <h2>API Configuration</h2>
-        <button id="closeSettings" class="action-icon">✕</button>
+    <div id="settingsPanel" class="settings-overlay hidden">
+      <div class="summary-top">
+        <h2>Settings</h2>
+        <button id="closeSettings" class="nav-action">
+          <svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
       </div>
       <div class="input-group">
         <label>Gemini API Key</label>
-        <input type="password" id="geminiKey" placeholder="Enter key...">
+        <input type="password" id="geminiKey" placeholder="Paste your Gemini key">
       </div>
       <div class="input-group">
-        <label>Serper Search API Key</label>
-        <input type="password" id="serperKey" placeholder="Enter key...">
+        <label>Serper API Key</label>
+        <input type="password" id="serperKey" placeholder="Paste your Serper key">
       </div>
-      <button id="saveKeysBtn" class="save-btn">Save Preferences</button>
+      <button id="saveKeysBtn" class="save-btn">Save Configuration</button>
     </div>
   </div>
   <script src="popup.js"></script>

@@ -1,7 +1,11 @@
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   if (request.action === "getPageContent") {
-    // Extract only readable text to avoid sending HTML tags to AI
-    const pageText = document.body.innerText.substring(0, 5000); // Limit to 5000 chars for simplicity
+    // Extract readable text, removing excessive whitespace
+    const pageText = document.body.innerText
+      .replace(/\s+/g, ' ')
+      .trim()
+      .substring(0, 10000); 
+    
     sendResponse({ content: pageText });
   }
 });

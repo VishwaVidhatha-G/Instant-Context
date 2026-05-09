@@ -14,5 +14,8 @@
       "css": ["overlay.css"]
     }
   ],
-  "host_permissions": ["<all_urls>"]
+  "host_permissions": ["<all_urls>"],
+  "side_panel": {
+    "default_path": "popup.html"
+  }
 }
