@@ -371,3 +371,4 @@ function setLoading(val) {
 
 document.addEventListener('DOMContentLoaded', initUI);
 // Updated UI and logic patterns
+

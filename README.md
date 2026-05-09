@@ -43,3 +43,4 @@ You don't need to be a computer expert to use this. Just follow these 4 steps:
 - **Privacy First**: We never see your API keys. They are stored only on your computer inside your browser.
 - **No Hidden Reading**: The tool only reads the page when you specifically ask it to.
 - **Simple Tech**: No heavy installation or complex coding required—just clean, fast, and private fact-checking.
+
