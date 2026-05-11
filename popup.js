@@ -32,10 +32,29 @@ async function initUI() {
 
   setupListeners();
   
-  const sync = await chrome.storage.local.get(['chatHistory', 'geminiKey', 'serperKey', 'currentTab', 'cachedSummary']);
+  const sync = await chrome.storage.local.get(['chatHistory', 'geminiKey', 'serperKey', 'currentTab', 'cachedSummary', 'lastDomain']);
+  
+  const tab = await getContext();
+  let currentDomain = "";
+  if (tab && tab.url) {
+    try {
+      currentDomain = new URL(tab.url).hostname;
+    } catch(e){}
+  }
+
+  // Session Intelligence: Check if domain changed
+  if (currentDomain && sync.lastDomain && sync.lastDomain !== currentDomain) {
+    chatHistory = [];
+    chrome.storage.local.set({ chatHistory: [], cachedSummary: null, lastDomain: currentDomain });
+    sync.chatHistory = [];
+    sync.cachedSummary = null;
+  } else if (currentDomain) {
+    chrome.storage.local.set({ lastDomain: currentDomain });
+  }
+
   if (sync.geminiKey) els.gInp.value = sync.geminiKey;
   if (sync.serperKey) els.sInp.value = sync.serperKey;
-  if (sync.chatHistory) { chatHistory = sync.chatHistory; renderHistory(); }
+  if (sync.chatHistory && sync.chatHistory.length > 0) { chatHistory = sync.chatHistory; renderHistory(); }
   if (sync.cachedSummary) els.sumPane.innerHTML = formatMD(sync.cachedSummary);
   
   if (sync.currentTab === 'summary') switchTab('summary', false);
@@ -151,31 +170,28 @@ async function handleAsk() {
   els.inp.value = '';
   setLoading(true);
 
-  const [pageData, searchResults] = await Promise.all([
-    getPageData(),
-    fetchSearch(q)
-  ]);
+  const pageData = await getPageData();
+  const searchResults = await fetchSearch(q, pageData.title);
 
   const prompt = `
     TASK: Answer the User Question using the provided data sources. 
     You MUST output your answer STRICTLY as a list of bullet points. 
-    DO NOT write any paragraphs. DO NOT write any introductory or concluding sentences.
+    DO NOT write any paragraphs or introductory text. Use easy, basic English. Be smart, simple, short, and clean. DO NOT sound robotic.
 
     CRITICAL SOURCE SEPARATION RULES:
-    1. SECTION 📄 Webpage Findings: Meticulously scan the "Webpage Context". Extract and provide ONLY the exact answer found directly in the webpage context based on the user's question. If the user asks about a CEO, and the context lists names and roles, you MUST extract them. DO NOT use search data here.
-    2. SECTION 🌐 Live Insights: Act as a highly intelligent chatbot (like Gemini). Provide the direct, comprehensive response that a chatbot would give to the user's question, utilizing your general knowledge and the "Live Internet Feed" to ensure complete accuracy.
-    3. SECTION 💡 Final Takeaways: Synthesize both sections into a clear, definitive conclusion.
+    1. SECTION 📄 Webpage Findings: Meticulously scan the "Webpage Context". Provide the EXACT answer found on the webpage regarding the question. If the context contains names or titles relevant to the question, you MUST list them.
+    2. SECTION 🌐 Live Insights: Act as a highly intelligent, context-aware chatbot (like Gemini). Provide the direct, comprehensive response utilizing your general knowledge and the "Live Internet Feed". Connect it to the user's implicit context.
+    3. SECTION 💡 Final Takeaways: Synthesize both sections into a clear, definitive, and human-readable conclusion.
 
     STRUCTURE FORMAT TO COPY EXACTLY:
     ### 📄 Webpage Findings
-    - [Bullet point 1]
-    - [Bullet point 2]
+    - [Bullet point]
     
     ### 🌐 Live Insights
-    - [Bullet point 1]
+    - [Bullet point]
     
     ### 💡 Final Takeaways
-    - [Bullet point 1]
+    - [Bullet point]
 
     Webpage Context: "${pageData.content || pageData.title}"
     Live Internet Feed: "${searchResults}"
@@ -210,13 +226,15 @@ async function handleAsk() {
   setLoading(false);
 }
 
-async function fetchSearch(q) {
+async function fetchSearch(q, contextTitle) {
   const res = await chrome.storage.local.get(['serperKey']);
   if (!res.serperKey) return "Search inactive.";
   
+  // Intelligent Context Augmentation
   let query = q;
-  if (q.toLowerCase().includes("ceo") || q.toLowerCase().includes("leader")) {
-    query += " succession transition news 2024 2025 2026";
+  if (contextTitle && contextTitle.trim().length > 0) {
+     // Clean up title slightly if needed, or just append it
+     query = `${q} ${contextTitle.split('-')[0].trim()} updates news`; 
   }
 
   try {
@@ -326,7 +344,21 @@ function addMessage(role, content) {
   }
   
   els.chatFlow.appendChild(group);
-  group.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  
+  // Smart Scroll Fix: Start from the top naturally, don't force scroll past content
+  requestAnimationFrame(() => {
+    if (role === 'user') {
+      els.chatFlow.scrollTo({ top: els.chatFlow.scrollHeight, behavior: 'smooth' });
+    } else {
+      // For AI, just ensure the start of the message is visible if it was offscreen,
+      // but do not aggressively scroll to block: 'start' which hides the user question.
+      const rect = group.getBoundingClientRect();
+      const parentRect = els.chatFlow.getBoundingClientRect();
+      if (rect.bottom > parentRect.bottom) {
+         els.chatFlow.scrollBy({ top: 50, behavior: 'smooth' }); // Gentle nudge
+      }
+    }
+  });
   
   chatHistory.push({ role, content });
   if (role === 'user') chrome.storage.local.set({ chatHistory });
@@ -366,7 +398,14 @@ function formatMD(text) {
 
 function setLoading(val) {
   els.askBtn.disabled = val;
-  els.askBtn.innerHTML = val ? '<div class="loader-bar" style="width:18px;margin:0;"></div>' : '<svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>';
+  if (val) {
+    els.askBtn.innerHTML = '<svg class="spinner" viewBox="0 0 50 50" width="16" height="16"><circle class="path" cx="25" cy="25" r="20" fill="none" stroke="currentColor" stroke-width="5"></circle></svg>';
+    els.askBtn.style.opacity = '0.5';
+    els.askBtn.style.boxShadow = 'none';
+  } else {
+    els.askBtn.innerHTML = '<svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>';
+    els.askBtn.style.opacity = '1';
+  }
 }
 
 document.addEventListener('DOMContentLoaded', initUI);
